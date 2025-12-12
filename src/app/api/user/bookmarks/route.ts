@@ -1,30 +1,41 @@
-// app/api/feed/explore/route.ts
+// app/api/user/bookmarks/route.ts
+import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { posts, users, ai_generations, likes } from '@/db/schema';
+import { bookmarks, posts, users, ai_generations, likes } from '@/db/schema';
 import { eq, desc, sql } from 'drizzle-orm';
-import { auth } from '@clerk/nextjs/server';
 
 export async function GET(req: Request) {
   try {
-    // Get authenticated user ID (optional for explore)
+    // 1. Authentication
     const { userId } = await auth();
 
-    // Parse pagination
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // 2. Parse pagination
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
-    const sortBy = searchParams.get('sort') || 'recent'; // 'recent' or 'popular'
     const offset = (page - 1) * limit;
 
-    // Build base query
-    let query = db
+    // 3. Fetch bookmarked posts
+    const bookmarkedPosts = await db
       .select({
+        // Bookmark data
+        bookmark_id: bookmarks.id,
+        bookmarked_at: bookmarks.created_at,
         // Post data
-        id: posts.id,
-        caption: posts.caption,
-        visibility: posts.visibility,
-        created_at: posts.created_at,
+        post: {
+          id: posts.id,
+          caption: posts.caption,
+          visibility: posts.visibility,
+          created_at: posts.created_at,
+        },
         // User data
         user: {
           id: users.id,
@@ -39,48 +50,35 @@ export async function GET(req: Request) {
           result_url: ai_generations.result_url,
           thumbnail_url: ai_generations.thumbnail_url,
         },
-        // Like status (if authenticated)
-        liked_by_me: userId ? sql<boolean>`EXISTS(
+        // Like status
+        liked_by_me: sql<boolean>`EXISTS(
           SELECT 1 FROM ${likes} 
           WHERE ${likes.post_id} = ${posts.id} 
           AND ${likes.user_id} = ${userId}
-        )` : sql<boolean>`false`,
+        )`,
         // Like count
         like_count: sql<number>`(
           SELECT COUNT(*)::int FROM ${likes} 
           WHERE ${likes.post_id} = ${posts.id}
         )`,
       })
-      .from(posts)
+      .from(bookmarks)
+      .innerJoin(posts, eq(bookmarks.post_id, posts.id))
       .innerJoin(users, eq(posts.user_id, users.id))
       .leftJoin(ai_generations, eq(posts.content_id, ai_generations.id))
-      .where(eq(posts.visibility, 'public')); // Only public posts
-
-    // Apply sorting
-    if (sortBy === 'popular') {
-      // Sort by like count (trending)
-      query = query.orderBy(
-        desc(sql`(SELECT COUNT(*) FROM ${likes} WHERE ${likes.post_id} = ${posts.id})`),
-        desc(posts.created_at)
-      );
-    } else {
-      // Sort by recent
-      query = query.orderBy(desc(posts.created_at));
-    }
-
-    // Apply pagination
-    const explorePosts = await query
+      .where(eq(bookmarks.user_id, userId))
+      .orderBy(desc(bookmarks.created_at))
       .limit(limit)
       .offset(offset);
 
-    // Get total count of public posts
+    // 4. Get total count
     const [{ count }] = await db
       .select({ count: sql`count(*)::int` })
-      .from(posts)
-      .where(eq(posts.visibility, 'public'));
+      .from(bookmarks)
+      .where(eq(bookmarks.user_id, userId));
 
     return NextResponse.json({
-      data: explorePosts,
+      data: bookmarkedPosts,
       pagination: {
         page,
         limit,
@@ -90,7 +88,7 @@ export async function GET(req: Request) {
     });
 
   } catch (error) {
-    console.error('Explore feed error:', error);
+    console.error('Bookmarks fetch error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

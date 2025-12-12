@@ -10,6 +10,8 @@ const envSchema = z.object({
   UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
   OPENAI_API_KEY: z.string().startsWith('sk-'),
   GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(), // Optional for Gemini
+  WOOCOMMERCE_WEBHOOK_SECRET: z.string().min(10), // New env var for WooCommerce
+  WORDPRESS_URL: z.string().url(),
 });
 
 // This will throw an error if any env var is missing or invalid
@@ -22,6 +24,8 @@ export const env = envSchema.parse({
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+   WOOCOMMERCE_WEBHOOK_SECRET: process.env.WOOCOMMERCE_WEBHOOK_SECRET, // ADD THIS
+  WORDPRESS_URL: process.env.WORDPRESS_URL,
 });
 
 // Now you can import { env } anywhere and get type-safe, validated env vars

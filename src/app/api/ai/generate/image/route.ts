@@ -8,6 +8,7 @@ import { CREDIT_COSTS, deductCredits, hasEnoughCredits, getCreditBalance } from 
 import { generateAIImage } from '@/lib/ai/providers';
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { aiGenerationLimit } from '@/lib/utils/ratelimit';
 
 export async function POST(req: Request) {
   try {
@@ -18,6 +19,26 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    // 2. Rate limiting (ADD THIS)
+    const { success, remaining, reset } = await aiGenerationLimit.limit(userId);
+
+    if (!success) {
+      return NextResponse.json(
+        { 
+          error: 'Rate limit exceeded',
+          remaining,
+          reset: new Date(reset).toISOString(),
+        },
+        { 
+          status: 429,
+          headers: {
+            'X-RateLimit-Remaining': remaining.toString(),
+            'X-RateLimit-Reset': reset.toString(),
+          }
+        }
       );
     }
 
@@ -62,7 +83,7 @@ export async function POST(req: Request) {
       .returning();
 
     // 6. Generate image with Vercel AI SDK (supports multiple providers)
-    const result = await generateAIImage(validatedInput.prompt, 'openai');
+    const result = await generateAIImage(validatedInput.prompt, 'google');
 
     if (!result.success) {
       // Mark as failed
@@ -109,7 +130,7 @@ export async function POST(req: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
+        { error: 'Invalid input', details: error.issues },
         { status: 400 }
       );
     }
