@@ -7,8 +7,10 @@ import { eq, and, sql } from 'drizzle-orm';
 
 export async function POST(
   req: Request,
-  { params }: { params: { postId: string } }
+  props: { params: Promise<{ postId: string }> }
 ) {
+  const params = await props.params;
+
   try {
     // 1. Authentication
     const { userId } = await auth();
@@ -57,9 +59,10 @@ export async function POST(
 
     // 5. Get like count
     const [{ count }] = await db
-      .select({ count: sql`count(*)::int` })
+      .select({ count: sql<number>`count(*)::int` })
       .from(likes)
       .where(eq(likes.post_id, params.postId));
+
 
     return NextResponse.json({
       success: true,
@@ -78,8 +81,10 @@ export async function POST(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { postId: string } }
+  props: { params: Promise<{ postId: string }> }
 ) {
+  const params = await props.params;
+
   try {
     // 1. Authentication
     const { userId } = await auth();
@@ -111,9 +116,10 @@ export async function DELETE(
 
     // 3. Get updated like count
     const [{ count }] = await db
-      .select({ count: sql`count(*)::int` })
+      .select({ count: sql<number>`count(*)::int` })
       .from(likes)
       .where(eq(likes.post_id, params.postId));
+
 
     return NextResponse.json({
       success: true,

@@ -7,8 +7,11 @@ import { eq, and } from 'drizzle-orm';
 
 export async function GET(
   req: Request,
-  { params }: { params: { jobId: string } }
+  props: { params: Promise<{ jobID: string }> }
 ) {
+  const params = await props.params;
+
+
   try {
     // 1. Authentication
     const { userId } = await auth();
@@ -23,7 +26,7 @@ export async function GET(
     // 2. Fetch generation by ID and ensure it belongs to the user
     const generation = await db.query.ai_generations.findFirst({
       where: and(
-        eq(ai_generations.id, params.jobId),
+        eq(ai_generations.id, params.jobID),
         eq(ai_generations.user_id, userId)
       ),
     });
@@ -59,9 +62,10 @@ export async function GET(
 // Delete generation route
 export async function DELETE(
   req: Request,
-  { params }: { params: { jobId: string } }
-) 
-{
+  props: { params: Promise<{ jobID: string }> }
+) {
+  const params = await props.params;
+
   try {
     // 1. Authentication
     const { userId } = await auth();
@@ -78,7 +82,7 @@ export async function DELETE(
       .delete(ai_generations)
       .where(
         and(
-          eq(ai_generations.id, params.jobId),
+          eq(ai_generations.id, params.jobID),
           eq(ai_generations.user_id, userId)
         )
       )
@@ -110,8 +114,11 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { jobId: string } }
+  props: { params: Promise<{ jobID: string }> }
 ) {
+  const params = await props.params;
+
+
   try {
     // 1. Authentication
     const { userId } = await auth();
@@ -138,13 +145,13 @@ export async function PATCH(
     // 3. Update visibility (only if owned by user)
     const [updatedGeneration] = await db
       .update(ai_generations)
-      .set({ 
+      .set({
         is_public,
         // Note: We don't update updated_at here since it's not a profile change
       })
       .where(
         and(
-          eq(ai_generations.id, params.jobId),
+          eq(ai_generations.id, params.jobID),
           eq(ai_generations.user_id, userId)
         )
       )

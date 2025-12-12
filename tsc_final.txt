@@ -1,0 +1,16 @@
+﻿.next/dev/types/validator.ts(80,39): error TS2306: File 'D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/ai/generate/video/route.ts' is not a module.
+.next/dev/types/validator.ts(99,31): error TS2344: Type 'typeof import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/ai/status/[jobID]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/ai/status/[jobID]">'.
+  Types of property 'GET' are incompatible.
+    Type '(req: Request, props: { params: Promise<{ jobId: string; }>; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ id: string; prompt: string; generation_type: "image" | ... 1 more ... | "text"; ... 5 more ...; created_at: Date; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ jobID: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters 'props' and 'context' are incompatible.
+        Type '{ params: Promise<{ jobID: string; }>; }' is not assignable to type '{ params: Promise<{ jobId: string; }>; }'.
+          Types of property 'params' are incompatible.
+            Type 'Promise<{ jobID: string; }>' is not assignable to type 'Promise<{ jobId: string; }>'.
+              Property 'jobId' is missing in type '{ jobID: string; }' but required in type '{ jobId: string; }'.
+.next/dev/types/validator.ts(152,39): error TS2306: File 'D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/payments/stripe/create-checkout/route.ts' is not a module.
+.next/dev/types/validator.ts(161,39): error TS2306: File 'D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/payments/stripe/webhook/route.ts' is not a module.
+.next/dev/types/validator.ts(255,39): error TS2306: File 'D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/layout.tsx' is not a module.
+src/app/api/feed/home/route.ts(116,35): error TS18046: 'count' is of type 'unknown'.
+src/app/api/feed/user/route.ts(91,35): error TS18046: 'count' is of type 'unknown'.
+src/app/api/user/bookmarks/route.ts(86,35): error TS18046: 'count' is of type 'unknown'.
+src/lib/ai/providers.ts(77,7): error TS2353: Object literal may only specify known properties, and 'maxTokens' does not exist in type 'CallSettings & { system?: string | undefined; } & { prompt: string | ModelMessage[]; messages?: undefined; } & { model: LanguageModel; tools?: ToolSet | undefined; ... 13 more ...; _internal?: { ...; } | undefined; }'.

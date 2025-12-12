@@ -74,7 +74,7 @@ export async function GET(req: Request) {
 
     // Get total count
     const [{ count }] = await db
-      .select({ count: sql`count(*)::int` })
+      .select({ count: sql<number>`count(*)::int` })
       .from(posts)
       .where(
         visibilityCondition

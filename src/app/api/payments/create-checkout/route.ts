@@ -9,7 +9,7 @@ import { z } from 'zod';
 
 // Input validation
 const checkoutSchema = z.object({
-  package_id: z.enum(['starter', 'pro', 'premium']),
+  package_id: z.enum(['10', '50', '5']), // Updated to match keys
 });
 
 // Your WordPress/WooCommerce site URL
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
     // 2. Validate input
     const body = await req.json();
     const validatedInput = checkoutSchema.parse(body);
+    const packageId = parseInt(validatedInput.package_id) as CreditPackageId;
 
     // 3. Get user details
     const user = await db.query.users.findFirst({
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
     }
 
     // 4. Get credit package
-    const creditPackage = getCreditPackage(validatedInput.package_id);
+    const creditPackage = getCreditPackage(packageId);
 
     if (!creditPackage) {
       return NextResponse.json(
@@ -55,20 +56,21 @@ export async function POST(req: Request) {
 
     // 5. Generate WooCommerce checkout URL
     // This assumes you have products in WooCommerce with specific IDs
-    const productIdMap: Record<CreditPackageId, number> = {
-      starter: 100, // Replace with your actual WooCommerce product IDs
-      pro: 101,
-      premium: 102,
+    const productIdMap: Record<number, number> = {
+      10: 100, // Replace with your actual WooCommerce product IDs
+      50: 101,
+      5: 102,
     };
 
-    const productId = productIdMap[validatedInput.package_id];
+    const productId = productIdMap[packageId];
+
 
     // Build checkout URL with pre-filled customer data
     const checkoutUrl = new URL(`${WORDPRESS_URL}/checkout/`);
     checkoutUrl.searchParams.set('add-to-cart', productId.toString());
     checkoutUrl.searchParams.set('billing_email', user.email);
     checkoutUrl.searchParams.set('billing_first_name', user.username);
-    
+
     // Add custom parameter to track user
     checkoutUrl.searchParams.set('legion_user_id', userId);
 
@@ -76,7 +78,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       checkout_url: checkoutUrl.toString(),
       package: {
-        id: creditPackage.id,
+        id: packageId,
         credits: creditPackage.credits,
         bonus: creditPackage.bonus || 0,
         total_credits: creditPackage.credits + (creditPackage.bonus || 0),
@@ -87,10 +89,11 @@ export async function POST(req: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
+        { error: 'Invalid input', details: error.issues },
         { status: 400 }
       );
     }
+
 
     console.error('Checkout creation error:', error);
     return NextResponse.json(

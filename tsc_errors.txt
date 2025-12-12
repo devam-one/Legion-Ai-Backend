@@ -1,0 +1,97 @@
+﻿.next/dev/types/validator.ts(80,39): error TS2306: File 'D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/ai/generate/video/route.ts' is not a module.
+.next/dev/types/validator.ts(99,31): error TS2344: Type 'typeof import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/ai/status/[jobID]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/ai/status/[jobID]">'.
+  Types of property 'GET' are incompatible.
+    Type '(req: Request, { params }: { params: { jobId: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ id: string; prompt: string; generation_type: "image" | "video" | "text"; ... 5 more ...; created_at: Date; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ jobID: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ jobID: string; }>; }' is not assignable to type '{ params: { jobId: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'jobId' is missing in type 'Promise<{ jobID: string; }>' but required in type '{ jobId: string; }'.
+.next/dev/types/validator.ts(152,39): error TS2306: File 'D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/payments/stripe/create-checkout/route.ts' is not a module.
+.next/dev/types/validator.ts(161,39): error TS2306: File 'D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/payments/stripe/webhook/route.ts' is not a module.
+.next/dev/types/validator.ts(180,31): error TS2344: Type 'typeof import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/posts/[postId]/bookmark/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/posts/[postId]/bookmark">'.
+  Types of property 'POST' are incompatible.
+    Type '(req: Request, { params }: { params: { postId: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ success: boolean; bookmarked: boolean; bookmark_id: string; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ postId: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ postId: string; }>; }' is not assignable to type '{ params: { postId: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'postId' is missing in type 'Promise<{ postId: string; }>' but required in type '{ postId: string; }'.
+.next/dev/types/validator.ts(189,31): error TS2344: Type 'typeof import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/posts/[postId]/comment/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/posts/[postId]/comment">'.
+  Types of property 'GET' are incompatible.
+    Type '(req: Request, { params }: { params: { postId: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ data: { id: number; content: string; created_at: Date; user_id: string; post_id: string; user: never; }[]; pagination: { ...; }; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ postId: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ postId: string; }>; }' is not assignable to type '{ params: { postId: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'postId' is missing in type 'Promise<{ postId: string; }>' but required in type '{ postId: string; }'.
+.next/dev/types/validator.ts(198,31): error TS2344: Type 'typeof import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/posts/[postId]/like/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/posts/[postId]/like">'.
+  Types of property 'POST' are incompatible.
+    Type '(req: Request, { params }: { params: { postId: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ success: boolean; liked: boolean; like_count: unknown; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ postId: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ postId: string; }>; }' is not assignable to type '{ params: { postId: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'postId' is missing in type 'Promise<{ postId: string; }>' but required in type '{ postId: string; }'.
+.next/dev/types/validator.ts(216,31): error TS2344: Type 'typeof import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/user/[username]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/user/[username]">'.
+  Types of property 'GET' are incompatible.
+    Type '(req: Request, { params }: { params: { username: string; }; }) => Promise<NextResponse<{ error: string; }> | NextResponse<{ user: { id: string; username: string; avatar_url: string | null; bio: string | null; created_at: Date; }; stats: { ...; }; relationship: { ...; }; recentPosts: { ...; }[]; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ username: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ username: string; }>; }' is not assignable to type '{ params: { username: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'username' is missing in type 'Promise<{ username: string; }>' but required in type '{ username: string; }'.
+.next/dev/types/validator.ts(255,39): error TS2306: File 'D:/learnt_dev/anti-g/rnr-legion/legion-backend/src/app/api/layout.tsx' is not a module.
+src/app/api/ai/history/route.ts(56,21): error TS2339: Property 'where' does not exist on type 'Omit<PgSelectBase<"ai_generations", { id: PgColumn<{ name: "id"; tableName: "ai_generations"; dataType: "string"; columnType: "PgUUID"; data: string; driverParam: string; notNull: true; hasDefault: true; isPrimaryKey: true; ... 5 more ...; generated: undefined; }, {}, {}>; ... 7 more ...; created_at: PgColumn<...>; ...'.
+src/app/api/ai/history/route.ts(59,21): error TS2339: Property 'where' does not exist on type 'Omit<PgSelectBase<"ai_generations", { id: PgColumn<{ name: "id"; tableName: "ai_generations"; dataType: "string"; columnType: "PgUUID"; data: string; driverParam: string; notNull: true; hasDefault: true; isPrimaryKey: true; ... 5 more ...; generated: undefined; }, {}, {}>; ... 7 more ...; created_at: PgColumn<...>; ...'.
+src/app/api/ai/history/route.ts(59,27): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(left: PgColumn<{ name: "generation_type"; tableName: "ai_generations"; dataType: "string"; columnType: "PgEnumColumn"; data: "image" | "video" | "text"; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>, right: "image" | ... 2 more ... | SQLWrapper): SQL<...>', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"image" | "video" | "text" | SQLWrapper'.
+  Overload 2 of 3, '(left: Aliased<string>, right: string | SQLWrapper): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "generation_type"; tableName: "ai_generations"; dataType: "string"; columnType: "PgEnumColumn"; data: "image" | "video" | "text"; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'Aliased<string>'.
+      Type 'PgColumn<{ name: "generation_type"; tableName: "ai_generations"; dataType: "string"; columnType: "PgEnumColumn"; data: "image" | "video" | "text"; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>' is missing the following properties from type 'Aliased<string>': sql, fieldAlias
+  Overload 3 of 3, '(left: never, right: unknown): SQL<unknown>', gave the following error.
+    Argument of type 'PgColumn<{ name: "generation_type"; tableName: "ai_generations"; dataType: "string"; columnType: "PgEnumColumn"; data: "image" | "video" | "text"; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>' is not assignable to parameter of type 'never'.
+src/app/api/ai/history/route.ts(74,34): error TS18046: 'count' is of type 'unknown'.
+src/app/api/feed/explore/route.ts(62,7): error TS2741: Property 'orderBy' is missing in type 'Omit<import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/node_modules/drizzle-orm/pg-core/query-builders/select").PgSelectBase<"posts", { id: import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/node_modules/drizzle-orm/pg-core/columns/common").PgColumn<{ name: "id"; tableName: "posts"; dataType: "string"; colu...' but required in type 'Omit<import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/node_modules/drizzle-orm/pg-core/query-builders/select").PgSelectBase<"posts", { id: import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/node_modules/drizzle-orm/pg-core/columns/common").PgColumn<{ name: "id"; tableName: "posts"; dataType: "string"; colu...'.
+src/app/api/feed/explore/route.ts(68,7): error TS2741: Property 'orderBy' is missing in type 'Omit<import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/node_modules/drizzle-orm/pg-core/query-builders/select").PgSelectBase<"posts", { id: import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/node_modules/drizzle-orm/pg-core/columns/common").PgColumn<{ name: "id"; tableName: "posts"; dataType: "string"; colu...' but required in type 'Omit<import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/node_modules/drizzle-orm/pg-core/query-builders/select").PgSelectBase<"posts", { id: import("D:/learnt_dev/anti-g/rnr-legion/legion-backend/node_modules/drizzle-orm/pg-core/columns/common").PgColumn<{ name: "id"; tableName: "posts"; dataType: "string"; colu...'.
+src/app/api/feed/explore/route.ts(88,35): error TS18046: 'count' is of type 'unknown'.
+src/app/api/feed/home/route.ts(116,35): error TS18046: 'count' is of type 'unknown'.
+src/app/api/feed/user/route.ts(91,35): error TS18046: 'count' is of type 'unknown'.
+src/app/api/payments/create-checkout/route.ts(7,10): error TS2305: Module '"@/lib/utils/credits"' has no exported member 'getCreditPackage'.
+src/app/api/payments/create-checkout/route.ts(7,33): error TS2305: Module '"@/lib/utils/credits"' has no exported member 'CreditPackageId'.
+src/app/api/payments/create-checkout/route.ts(90,50): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/app/api/payments/packages/route.ts(8,13): error TS2339: Property 'id' does not exist on type '10 | 50 | 5'.
+  Property 'id' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(9,18): error TS2339: Property 'credits' does not exist on type '10 | 50 | 5'.
+  Property 'credits' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(10,16): error TS2339: Property 'bonus' does not exist on type '10 | 50 | 5'.
+  Property 'bonus' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(11,24): error TS2339: Property 'credits' does not exist on type '10 | 50 | 5'.
+  Property 'credits' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(11,39): error TS2339: Property 'bonus' does not exist on type '10 | 50 | 5'.
+  Property 'bonus' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(12,20): error TS2339: Property 'price_inr' does not exist on type '10 | 50 | 5'.
+  Property 'price_inr' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(13,20): error TS2339: Property 'price_usd' does not exist on type '10 | 50 | 5'.
+  Property 'price_usd' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(14,18): error TS2339: Property 'popular' does not exist on type '10 | 50 | 5'.
+  Property 'popular' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(16,18): error TS2339: Property 'credits' does not exist on type '10 | 50 | 5'.
+  Property 'credits' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(16,33): error TS2339: Property 'bonus' does not exist on type '10 | 50 | 5'.
+  Property 'bonus' does not exist on type '10'.
+src/app/api/payments/packages/route.ts(16,52): error TS2339: Property 'price_inr' does not exist on type '10 | 50 | 5'.
+  Property 'price_inr' does not exist on type '10'.
+src/app/api/posts/[postId]/comment/route.ts(71,35): error TS18046: 'count' is of type 'unknown'.
+src/app/api/posts/[postId]/comment/route.ts(118,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: { content: string | SQL<unknown> | Placeholder<string, any>; user_id: string | SQL<unknown> | Placeholder<string, any>; post_id: string | SQL<unknown> | Placeholder<...>; id?: number | ... 2 more ... | undefined; created_at?: SQL<...> | ... 2 more ... | undefined; }): PgInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, and 'text' does not exist in type '{ content: string | SQL<unknown> | Placeholder<string, any>; user_id: string | SQL<unknown> | Placeholder<string, any>; post_id: string | SQL<unknown> | Placeholder<...>; id?: number | ... 2 more ... | undefined; created_at?: SQL<...> | ... 2 more ... | undefined; }'.
+  Overload 2 of 2, '(values: { content: string | SQL<unknown> | Placeholder<string, any>; user_id: string | SQL<unknown> | Placeholder<string, any>; post_id: string | SQL<unknown> | Placeholder<...>; id?: number | ... 2 more ... | undefined; created_at?: SQL<...> | ... 2 more ... | undefined; }[]): PgInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, and 'post_id' does not exist in type '{ content: string | SQL<unknown> | Placeholder<string, any>; user_id: string | SQL<unknown> | Placeholder<string, any>; post_id: string | SQL<unknown> | Placeholder<...>; id?: number | ... 2 more ... | undefined; created_at?: SQL<...> | ... 2 more ... | undefined; }[]'.
+src/app/api/user/bookmarks/route.ts(86,35): error TS18046: 'count' is of type 'unknown'.
+src/lib/ai/providers.ts(77,7): error TS2353: Object literal may only specify known properties, and 'maxTokens' does not exist in type 'CallSettings & { system?: string | undefined; } & { prompt: string | ModelMessage[]; messages?: undefined; } & { model: LanguageModel; tools?: ToolSet | undefined; ... 13 more ...; _internal?: { ...; } | undefined; }'.
+src/lib/utils/optimistic.ts(45,15): error TS2304: Cannot find name 'db'.
+src/lib/utils/optimistic.ts(45,25): error TS2304: Cannot find name 'likes'.
+src/lib/utils/optimistic.ts(51,15): error TS2304: Cannot find name 'db'.
+src/lib/utils/optimistic.ts(51,25): error TS2304: Cannot find name 'likes'.
+src/lib/utils/optimistic.ts(52,11): error TS2304: Cannot find name 'and'.
+src/lib/utils/optimistic.ts(53,13): error TS2304: Cannot find name 'eq'.
+src/lib/utils/optimistic.ts(53,16): error TS2304: Cannot find name 'likes'.
+src/lib/utils/optimistic.ts(54,13): error TS2304: Cannot find name 'eq'.
+src/lib/utils/optimistic.ts(54,16): error TS2304: Cannot find name 'likes'.

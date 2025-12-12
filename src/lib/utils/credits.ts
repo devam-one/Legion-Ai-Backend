@@ -12,11 +12,24 @@ export const CREDIT_COSTS = {
   text: 5,
 } as const;
 
+export type CreditPackageId = 10 | 50 | 5;
+
+export const CREDIT_PACKAGES: Record<CreditPackageId, { credits: number; bonus: number; price_inr: number; price_usd: number; popular?: boolean }> = {
+  10: { credits: 100, bonus: 0, price_inr: 99, price_usd: 1.99 },
+  50: { credits: 550, bonus: 50, price_inr: 499, price_usd: 5.99, popular: true },
+  5: { credits: 50, bonus: 0, price_inr: 49, price_usd: 0.99 },
+};
+
+export function getCreditPackage(id: number): (typeof CREDIT_PACKAGES)[CreditPackageId] | undefined {
+  return CREDIT_PACKAGES[id as CreditPackageId];
+}
+
+
 /**
  * Check if user has enough credits
  */
 export async function hasEnoughCredits(
-  userId: string, 
+  userId: string,
   requiredCredits: number
 ): Promise<boolean> {
   const user = await db.query.users.findFirst({

@@ -73,9 +73,10 @@ export async function GET(req: Request) {
 
     // 4. Get total count
     const [{ count }] = await db
-      .select({ count: sql`count(*)::int` })
+      .select({ count: sql<number>`count(*)::int` })
       .from(bookmarks)
       .where(eq(bookmarks.user_id, userId));
+
 
     return NextResponse.json({
       data: bookmarkedPosts,

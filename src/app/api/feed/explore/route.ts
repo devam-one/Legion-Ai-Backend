@@ -18,7 +18,7 @@ export async function GET(req: Request) {
     const offset = (page - 1) * limit;
 
     // Build base query
-    let query = db
+    const baseQuery = db
       .select({
         // Post data
         id: posts.id,
@@ -54,30 +54,32 @@ export async function GET(req: Request) {
       .from(posts)
       .innerJoin(users, eq(posts.user_id, users.id))
       .leftJoin(ai_generations, eq(posts.content_id, ai_generations.id))
-      .where(eq(posts.visibility, 'public')); // Only public posts
+      .where(eq(posts.visibility, 'public')) // Only public posts
+      .$dynamic();
 
     // Apply sorting
     if (sortBy === 'popular') {
       // Sort by like count (trending)
-      query = query.orderBy(
+      baseQuery.orderBy(
         desc(sql`(SELECT COUNT(*) FROM ${likes} WHERE ${likes.post_id} = ${posts.id})`),
         desc(posts.created_at)
       );
     } else {
       // Sort by recent
-      query = query.orderBy(desc(posts.created_at));
+      baseQuery.orderBy(desc(posts.created_at));
     }
 
     // Apply pagination
-    const explorePosts = await query
+    const explorePosts = await baseQuery
       .limit(limit)
       .offset(offset);
 
     // Get total count of public posts
     const [{ count }] = await db
-      .select({ count: sql`count(*)::int` })
+      .select({ count: sql<number>`count(*)::int` })
       .from(posts)
       .where(eq(posts.visibility, 'public'));
+
 
     return NextResponse.json({
       data: explorePosts,

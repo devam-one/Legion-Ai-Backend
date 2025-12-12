@@ -7,8 +7,10 @@ import { auth } from '@clerk/nextjs/server';
 
 export async function GET(
   req: Request,
-  { params }: { params: { username: string } }
+  props: { params: Promise<{ username: string }> }
 ) {
+  const params = await props.params;
+
   try {
     // Get current user (optional - may be viewing anonymously)
     const { userId: currentUserId } = await auth();

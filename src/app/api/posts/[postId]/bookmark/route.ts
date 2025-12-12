@@ -8,8 +8,10 @@ import { eq, and, sql } from 'drizzle-orm';
 // POST - Bookmark a post
 export async function POST(
   req: Request,
-  { params }: { params: { postId: string } }
+  props: { params: Promise<{ postId: string }> }
 ) {
+  const params = await props.params;
+
   try {
     // 1. Authentication
     const { userId } = await auth();
@@ -74,8 +76,10 @@ export async function POST(
 // DELETE - Remove bookmark
 export async function DELETE(
   req: Request,
-  { params }: { params: { postId: string } }
+  props: { params: Promise<{ postId: string }> }
 ) {
+  const params = await props.params;
+
   try {
     // 1. Authentication
     const { userId } = await auth();

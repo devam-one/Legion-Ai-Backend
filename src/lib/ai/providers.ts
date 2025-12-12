@@ -16,7 +16,7 @@ export const AI_MODELS = {
     google2: google.image('imagen-3'), // Alternative Google model
     // Add more providers as needed
   },
-  
+
   // Text generation
   text: {
     openai: openai('gpt-4o'),
@@ -65,16 +65,16 @@ export async function generateAIImage(prompt: string, provider: 'google' = 'goog
  * Can switch between OpenAI and Gemini easily
  */
 export async function generateAIText(
-  prompt: string, 
+  prompt: string,
   provider: 'openai' | 'gemini' | 'gptMini' = 'gemini' // Gemini default (cheaper)
 ) {
   try {
     const { generateText } = await import('ai');
-    
+
     const { text } = await generateText({
       model: AI_MODELS.text[provider],
       prompt: prompt,
-      maxTokens: 500,
+
     });
 
     return {

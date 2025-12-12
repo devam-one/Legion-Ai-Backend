@@ -16,8 +16,10 @@ const commentSchema = z.object({
 // GET - Fetch comments
 export async function GET(
   req: Request,
-  { params }: { params: { postId: string } }
+  props: { params: Promise<{ postId: string }> }
 ) {
+  const params = await props.params;
+
   try {
     // No auth required - public comments (adjust if needed)
 
@@ -58,9 +60,10 @@ export async function GET(
 
     // 3. Get total count
     const [{ count }] = await db
-      .select({ count: sql`count(*)::int` })
+      .select({ count: sql<number>`count(*)::int` })
       .from(comments)
       .where(eq(comments.post_id, params.postId));
+
 
     return NextResponse.json({
       data: postComments,
@@ -84,8 +87,10 @@ export async function GET(
 // POST - Create comment
 export async function POST(
   req: Request,
-  { params }: { params: { postId: string } }
+  props: { params: Promise<{ postId: string }> }
 ) {
+  const params = await props.params;
+
   try {
     // 1. Authentication
     const { userId } = await auth();
@@ -118,9 +123,10 @@ export async function POST(
       .values({
         post_id: params.postId,
         user_id: userId,
-        text: validatedInput.text,
+        content: validatedInput.text,
       })
       .returning();
+
 
     // 5. Fetch comment with user info
     const commentWithUser = await db.query.comments.findFirst({

@@ -101,11 +101,12 @@ export async function GET(req: Request) {
       await cacheHomeFeed(userId, feedPosts);
     }
 
-    // Get total count
+    // 104. Get total count
     const [{ count }] = await db
-      .select({ count: sql`count(*)::int` })
+      .select({ count: sql<number>`count(*)::int` })
       .from(posts)
       .where(inArray(posts.user_id, followingIds));
+
 
     return NextResponse.json({
       data: feedPosts.slice(offset, offset + limit),

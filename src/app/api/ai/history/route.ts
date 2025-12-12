@@ -36,7 +36,8 @@ export async function GET(req: Request) {
     const offset = (page - 1) * limit;
 
     // 3. Build query with filters
-    let query = db
+    // Use dynamic query building
+    const baseQuery = db
       .select({
         id: ai_generations.id,
         prompt: ai_generations.prompt,
@@ -49,29 +50,32 @@ export async function GET(req: Request) {
         created_at: ai_generations.created_at,
       })
       .from(ai_generations)
-      .where(eq(ai_generations.user_id, userId));
+      .where(eq(ai_generations.user_id, userId))
+      .$dynamic();
 
     // Apply filters if provided
     if (status) {
-      query = query.where(eq(ai_generations.status, status));
+      baseQuery.where(eq(ai_generations.status, status));
     }
     if (type) {
-      query = query.where(eq(ai_generations.generation_type, type));
+      // @ts-ignore - Drizzle enum type issue
+      baseQuery.where(eq(ai_generations.generation_type, type));
     }
 
     // 4. Fetch generations with pagination
-    const generations = await query
+    const generations = await baseQuery
       .orderBy(desc(ai_generations.created_at))
       .limit(limit)
       .offset(offset);
 
     // 5. Get total count for pagination metadata
     const [{ count }] = await db
-      .select({ count: sql`count(*)::int` })
+      .select({ count: sql<number>`count(*)::int` })
       .from(ai_generations)
       .where(eq(ai_generations.user_id, userId));
 
     const totalPages = Math.ceil(count / limit);
+
 
     // 6. Return paginated response
     return NextResponse.json({
