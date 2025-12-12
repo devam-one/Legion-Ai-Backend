@@ -8,16 +8,20 @@ const envSchema = z.object({
   DATABASE_URL: z.string().startsWith('postgresql://'),
   UPSTASH_REDIS_REST_URL: z.string().url(),
   UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
+  OPENAI_API_KEY: z.string().startsWith('sk-'),
+  GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(), // Optional for Gemini
 });
 
 // This will throw an error if any env var is missing or invalid
 export const env = envSchema.parse({
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
   CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-  CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET, // ADD THIS
+  CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
   DATABASE_URL: process.env.DATABASE_URL,
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
 });
 
 // Now you can import { env } anywhere and get type-safe, validated env vars

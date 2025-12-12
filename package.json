@@ -13,10 +13,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.46",
+    "@ai-sdk/openai": "^2.0.85",
     "@clerk/nextjs": "^6.36.2",
     "@neondatabase/serverless": "^1.0.2",
     "@upstash/ratelimit": "^2.0.7",
     "@upstash/redis": "^1.35.7",
+    "ai": "^5.0.112",
     "dotenv": "^17.2.3",
     "helmet": "^8.1.0",
     "next": "^16.0.10",
