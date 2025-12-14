@@ -9,6 +9,7 @@ import { generateAIImage } from '@/lib/ai/providers';
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { aiGenerationLimit } from '@/lib/utils/ratelimit';
+import * as Sentry from '@sentry/nextjs';
 
 export async function POST(req: Request) {
   try {
@@ -27,12 +28,12 @@ export async function POST(req: Request) {
 
     if (!success) {
       return NextResponse.json(
-        { 
+        {
           error: 'Rate limit exceeded',
           remaining,
           reset: new Date(reset).toISOString(),
         },
-        { 
+        {
           status: 429,
           headers: {
             'X-RateLimit-Remaining': remaining.toString(),
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
 
     if (!hasCredits) {
       return NextResponse.json(
-        { 
+        {
           error: 'Insufficient credits',
           required: requiredCredits,
         },
@@ -135,10 +136,12 @@ export async function POST(req: Request) {
       );
     }
 
+    Sentry.captureException(error);
     console.error('Image generation error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
+
   }
 }

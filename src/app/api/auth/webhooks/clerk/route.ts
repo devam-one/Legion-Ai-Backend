@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { redis } from '@/lib/redis';
 
 // Clerk webhook event type
 type ClerkWebhookEvent = {
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
 
   // Verify webhook signature
   const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET!);
-  
+
   let evt: ClerkWebhookEvent;
 
   try {
@@ -49,6 +50,12 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error('Error verifying webhook:', err);
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
+  }
+
+  // Check if already processed (Idempotency)
+  const cached = await redis.get(`webhook:processed:${svix_id}`);
+  if (cached) {
+    return NextResponse.json({ success: true, cached: true });
   }
 
   // Handle the event
@@ -90,6 +97,9 @@ export async function POST(req: Request) {
         console.log(`✅ User deleted: ${data.id}`);
         break;
     }
+
+    // Mark as processed (24hr TTL)
+    await redis.set(`webhook:processed:${svix_id}`, '1', { ex: 86400 });
 
     return NextResponse.json({ success: true });
   } catch (error) {

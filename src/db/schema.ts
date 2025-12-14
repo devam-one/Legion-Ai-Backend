@@ -104,3 +104,44 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
   likes: many(likes),
   comments: many(comments),
 }));
+
+// Add to schema.ts
+
+export const transactionStatusEnum = pgEnum('transaction_status', [
+  'pending', 'processing', 'completed', 'failed', 'refunded'
+]);
+
+export const credit_transactions = pgTable('credit_transactions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  user_id: text('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+
+  order_id: text('order_id').unique(), // WooCommerce order ID
+  session_id: text('session_id').unique(), // Checkout session ID
+  idempotency_key: text('idempotency_key').unique(), // Webhook deduplication
+
+  credits_amount: integer('credits_amount').notNull(),
+  amount_paid: integer('amount_paid').notNull(), // In paise/cents
+  currency: text('currency').default('INR'),
+
+  status: transactionStatusEnum('status').default('pending').notNull(),
+  payment_signature: text('payment_signature'), // Webhook signature
+
+  metadata: text('metadata'), // JSON with package details
+
+  created_at: timestamp('created_at').defaultNow().notNull(),
+  completed_at: timestamp('completed_at'),
+});
+
+// Double-ledger for reconciliation
+export const credit_balance_snapshots = pgTable('credit_balance_snapshots', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  user_id: text('user_id').references(() => users.id).notNull(),
+  transaction_id: uuid('transaction_id').references(() => credit_transactions.id),
+
+  balance_before: integer('balance_before').notNull(),
+  balance_after: integer('balance_after').notNull(),
+  change_amount: integer('change_amount').notNull(),
+
+  reason: text('reason').notNull(),
+  created_at: timestamp('created_at').defaultNow().notNull(),
+});

@@ -7,6 +7,7 @@ import { CREDIT_COSTS, deductCredits, hasEnoughCredits, getCreditBalance } from 
 import { generateAIText } from '@/lib/ai/providers';
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import * as Sentry from '@sentry/nextjs';
 
 // Input validation
 const generateTextSchema = z.object({
@@ -38,7 +39,7 @@ export async function POST(req: Request) {
 
     if (!hasCredits) {
       return NextResponse.json(
-        { 
+        {
           error: 'Insufficient credits',
           required: requiredCredits,
         },
@@ -70,7 +71,7 @@ export async function POST(req: Request) {
 
     // 6. Generate text with Vercel AI SDK
     const result = await generateAIText(
-      validatedInput.prompt, 
+      validatedInput.prompt,
       validatedInput.provider
     );
 
@@ -122,6 +123,7 @@ export async function POST(req: Request) {
       );
     }
 
+    Sentry.captureException(error);
     console.error('Text generation error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
